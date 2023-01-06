@@ -687,7 +687,6 @@ RunResult vrun_program(
 		sout << " " << escapeshellarg(*it);
 	}
 
-	printf("hello world4   %s   %s  %s\n", input_file_name, output_file_name, sout.str().c_str());
 	if (execute(sout.str().c_str()) != 0) {
 		return RunResult::failed_result();
 	}
@@ -719,7 +718,6 @@ RunResult run_program(
 		argv.push_back(arg);
 	}
 	va_end(vl);
-	printf("hello world3\n");
 	return vrun_program(run_program_result_file_name,
 			input_file_name,
 			output_file_name,
@@ -791,8 +789,8 @@ RunCompilerResult run_compiler(const char *path, ...) {
 
 	RunResult ret = vrun_program(
 			(result_path + "/run_compiler_result.txt").c_str(),
-			"stdin",
-			"stdout",
+			"/dev/null",
+			"stderr",
 			(result_path + "/compiler_result.txt").c_str(),
 			RL_COMPILER_DEFAULT,
 			argv);
@@ -1196,8 +1194,7 @@ RunCompilerResult compile_lua(const string &name, const string &path = work_path
 
 RunCompilerResult compile(const char *name)  {
 	string lang = conf_str(string(name) + "_language");
-	
-	printf("hello world6: answer:%s  work_path:%s\n", name, work_path.c_str());
+
 	if ((lang == "C++" || lang == "C++11" || lang == "C") && has_illegal_keywords_in_file(work_path + "/" + name + ".code"))
 	{
 		RunCompilerResult res;
@@ -1228,7 +1225,6 @@ RunCompilerResult compile(const char *name)  {
 		return compile_java11(name);
 	}
 	if (lang == "C") {
-		printf("start3\n");
 		return compile_c(name);
 	}
 	if (lang == "Pascal") {
@@ -1278,7 +1274,6 @@ RunCompilerResult compile_python3(const string &name, const string &path = work_
 RunCompilerResult compile_with_implementer(const string& name)  {
 	string lang = conf_str(string(name) + "_language");
 
-	printf("hello world8\n");
 	if (has_illegal_keywords_in_file(work_path + "/" + name + ".code") && lang != "Lua")
 	{
 		RunCompilerResult res;
@@ -1573,10 +1568,8 @@ void main_judger_init(int argc, char **argv)  {
 	executef("cp -r %s/require/* %s 2>/dev/null", data_path.c_str(), work_path.c_str());
 
 	if (conf_is("use_builtin_judger", "on")) {
-		printf("----judger1---\n");
 		config["judger"] = string(UOJ_WORK_PATH) + "/builtin/judger/judger";
 	} else {
-		printf("----judger2---\n");
 		config["judger"] = data_path + "/judger";
 	}
 }
