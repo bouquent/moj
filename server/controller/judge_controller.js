@@ -11,9 +11,8 @@ var parser = new xml2json.Parser();
 // Save the submitted code to a local file and save the submission information into the database
 exports.submit_answer = async function(req, res)
 {
-
 	console.log(req.headers);
-	if(!isset(req.headers['rand-str']) || !isset(req.headers['timestamp']) || !isset(req.headers['encoded-str'])) 
+	if(is_undefined(req.headers['rand-str']) || is_undefined(req.headers['timestamp']) || is_undefined(req.headers['encoded-str'])) 
     {
 		console.log('need more headers');
         res.end('need more headers');
@@ -36,7 +35,7 @@ exports.submit_answer = async function(req, res)
     console.log(problem['submission_requirement']);
 	
 	console.log(req.body);
-    var langId = isset(req.body['langId'])?req.body['langId']:2;
+    var langId = is_undefined(req.body['langId']) ? 2 : req.body['langId'];
     if(langId == 1) langId = "C";
     else if(langId == 2) langId = "C++";
     else if(langId == 3) langId = "Pascal";
@@ -147,7 +146,7 @@ exports.get_status = async function(req, res)
 	console.log(req.headers);
 	res.setHeader("Content-Type", "application/json");
 
-	if(!isset(req.headers['rand-str']) || !isset(req.headers['timestamp']) || !isset(req.headers['encoded-str'])) 
+	if(is_undefined(req.headers['rand-str']) || is_undefined(req.headers['timestamp']) || is_undefined(req.headers['encoded-str'])) 
     {
         res.end('need more headers');
         return;
@@ -158,7 +157,7 @@ exports.get_status = async function(req, res)
         return;
     }
 
-	if( !isset(req.query.submitType) || ( req.query.submitType != 1 && req.query.submitType != 2) ) 
+	if( is_undefined(req.query.submitType) || ( req.query.submitType != 1 && req.query.submitType != 2) ) 
 	{
 		res.end("invalid input");
 		return;
@@ -193,11 +192,11 @@ exports.get_status = async function(req, res)
     }
 	
 	let returnValue = {}; 
-	returnValue.timeConsumptionMs = (isset(result['time'])?result['time']:0);
-	returnValue.memoryConsumptionKbs = (isset(result['memory'])?result['memory']:0);
+	returnValue.timeConsumptionMs = (is_undefined(result['time'])? 0 : result['time']);
+	returnValue.memoryConsumptionKbs = (is_undefined(result['memory']) ? 0 : result['memory']);
 
 	
-	if( isset(result['error']  ))
+	if(!is_undefined(result['error']))
 	{
 		returnValue.status = 12;
 		result['details'] = JSON.stringify(result['details']);
@@ -284,7 +283,7 @@ exports.fetch_and_send = async function(req, res)
 {
     let data = req.body;
 
-    while( isset( req.body['submit'] ) ) //submit judge result to database
+    while( !is_undefined( req.body['submit'] ) ) //submit judge result to database
     {
         if( data['is_custom_test'] != undefined )
         {
@@ -298,10 +297,9 @@ exports.fetch_and_send = async function(req, res)
             if(submission['status'] != 'Judging') {
                 break;
             }
-	    console.log(submission);
             content = JSON.parse(submission['content']);
             result = JSON.parse(data['result']);
-            if (isset(result["error"])) {
+            if (!is_undefined(result["error"])) {
                 let sql = "update custom_test_submissions set status = $1, result = $2 where id = $3;";
                 let params = [result['status'], JSON.stringify(result), data['id']];
                 await pg.query(sql, params);
@@ -343,9 +341,9 @@ exports.fetch_and_send = async function(req, res)
         break;
     }
     
-    if( isset(req.body['update-status']) )
+    if(!is_undefined(req.body['update-status']))
     {
-		if (isset(req.body['is_custom_test'])) {
+		if (!is_undefined(req.body['is_custom_test'])) {
             await pg.query("update custom_test_submissions set status_details = $1 where id = $2;", [data['status'], data['id']]);
 		} else {
 			await pg.query("update submissions set status_details = $1 where id = $2;", [data['status'], data['id']]);
@@ -354,7 +352,7 @@ exports.fetch_and_send = async function(req, res)
         return;
     }
 
-    if(isset(data['fetch_new']) && data['fetch_new'] == 0)
+    if(!is_undefined(data['fetch_new']) && data['fetch_new'] == 0)
     {
         res.end("Nothing to judge")
         return 0-0; //nothing to judge.
@@ -392,9 +390,9 @@ exports.fetch_and_send = async function(req, res)
     return;
 }
 
-function isset(val)
+function is_undefined(val)
 {
-    return (typeof val != "undefined");
+    return (typeof val == "undefined");
 }
 
 async function querySubmissionToJudge(status, set_field)
