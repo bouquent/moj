@@ -1,5 +1,0 @@
-/opt/uoj/judger/judge_client start
-service postgresql start
-cd /opt/server && forever /opt/server/bin/www
-exec bash
-

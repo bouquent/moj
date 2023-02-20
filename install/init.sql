@@ -1,3 +1,6 @@
+CREATE ROLE oj_web LOGIN password 'chenzezheng666';
+\c - oj_web
+
 CREATE TABLE custom_test_submissions (
   id serial NOT NULL,
   problem_id integer NOT NULL,
@@ -48,4 +51,9 @@ CREATE TABLE custom_test_output (
   id integer NOT NULL,
   content text NOT NULL,
   PRIMARY KEY (id)
+);
+
+CREATE TABLE lock_table(
+  lock_name text NOT NULL,
+  PRIMARY KEY(lock_name)
 );
