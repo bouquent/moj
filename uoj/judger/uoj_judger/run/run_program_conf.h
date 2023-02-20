@@ -138,11 +138,12 @@ inline bool is_in_set_smart(string name, const set<string> &s) {
 			return false;
 		}
 	}
-	int level;
+	int level;  
 	for (level = 0; !name.empty(); name = dirname(name), level++) {
 		if (level == 1 && s.count(name + "/*")) {
 			return true;
 		}
+		//Adapted directory
 		if (s.count(name + "/")) {
 			return true;
 		}
@@ -522,6 +523,7 @@ void init_conf(const RunProgramConfig &config) {
 
 		syscall_max_cnt[__NR_setrlimit      ] = -1;
 		syscall_max_cnt[__NR_pipe           ] = -1;
+		syscall_max_cnt[__NR_pipe2           ] = -1;
 
 		syscall_max_cnt[__NR_getdents64     ] = -1;
 		syscall_max_cnt[__NR_getdents       ] = -1;
