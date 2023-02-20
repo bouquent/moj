@@ -1,0 +1,4 @@
+service postgresql start
+python3 /opt/uoj/judger/judge_client start
+cd /opt/server && forever /opt/server/bin/www start &
+
