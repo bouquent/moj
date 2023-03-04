@@ -12,13 +12,12 @@ var parser = new xml2json.Parser();
 exports.submit_answer = async function(req, res)
 {
 	console.log(req.headers);
-	if(is_undefined(req.headers['rand-str']) || is_undefined(req.headers['timestamp']) || is_undefined(req.headers['encoded-str'])) 
+    if(is_undefined(req.headers['timestamp']) || is_undefined(req.headers['encoded-str']))
     {
-		console.log('need more headers');
         res.end('need more headers');
         return;
     }
-    if( !verifier.verify(req.headers['rand-str'], req.headers['timestamp'], req.headers['encoded-str']) )
+    if( !verifier.verify(req.headers['timestamp'], req.headers['encoded-str']) )
     {
         res.end("verification failed\n");
         return;
@@ -146,12 +145,12 @@ exports.get_status = async function(req, res)
 	console.log(req.headers);
 	res.setHeader("Content-Type", "application/json");
 
-	if(is_undefined(req.headers['rand-str']) || is_undefined(req.headers['timestamp']) || is_undefined(req.headers['encoded-str'])) 
+   if(is_undefined(req.headers['timestamp']) || is_undefined(req.headers['encoded-str'])) 
     {
         res.end('need more headers');
         return;
     }
-    if( !verifier.verify(req.headers['rand-str'], req.headers['timestamp'], req.headers['encoded-str']) )
+    if( !verifier.verify(req.headers['timestamp'], req.headers['encoded-str']) )
     {
         res.end("verification failed\n");
         return;
@@ -288,7 +287,6 @@ exports.fetch_and_send = async function(req, res)
         if( data['is_custom_test'] != undefined )
         {
             let submission = await pg.query("select submitter, status, content, result, problem_id from custom_test_submissions where id = $1;", [data['id']]);
-            console.log("It is custom test");
             if(submission.rows.length == 0) 
             {
                 break;
