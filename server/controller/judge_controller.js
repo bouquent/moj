@@ -144,7 +144,6 @@ exports.get_status = async function(req, res)
 {
 	console.log(req.headers);
 	res.setHeader("Content-Type", "application/json");
-
    if(is_undefined(req.headers['timestamp']) || is_undefined(req.headers['encoded-str'])) 
     {
         res.end('need more headers');
@@ -198,10 +197,10 @@ exports.get_status = async function(req, res)
 	if(!is_undefined(result['error']))
 	{
 		returnValue.status = 12;
+        returnValue.rightCaseNum = 0;
+        returnValue.error = result['error'];
 		result['details'] = JSON.stringify(result['details']);
 		returnValue.memo = { stdout:'', stderr:result['details'], userSolutionPrintContent:'', outputContent:''  };
-		returnValue.rightCaseNum = 0;
-		returnValue.allCaseNum = 1;
 		res.end(JSON.stringify(returnValue));
 		return;
 	}
@@ -235,7 +234,6 @@ exports.get_status = async function(req, res)
             returnValue.rightCaseNum = result_status[6];
             returnValue.allCaseNum = tests.length;
             returnValue.memo = { stdout:'', stderr:'', userSolutionPrintContent: '', outputContent:''  };
-            
         }
         else 
         {
@@ -312,7 +310,7 @@ exports.fetch_and_send = async function(req, res)
         {
             let submission = await pg.query("SELECT * FROM submissions WHERE id = $1;", [data['id']]);
             console.log("It is a common submission");
-	    if(submission.rows.length == 0) 
+	        if(submission.rows.length == 0) 
             {
                 break;
             }

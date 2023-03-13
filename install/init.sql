@@ -10,7 +10,7 @@ CREATE TABLE custom_test_submissions (
   judge_time timestamp with time zone DEFAULT NULL,
   result text NOT NULL,
   status varchar(20) NOT NULL,
-  status_details varchar(100) NOT NULL,
+  status_details varchar(100) DEFAULT '',
   PRIMARY KEY (id)
 );
 
@@ -49,7 +49,7 @@ CREATE TABLE problems (
 
 CREATE TABLE custom_test_output (
   id integer NOT NULL,
-  content text NOT NULL,
+  content text,
   PRIMARY KEY (id)
 );
 
