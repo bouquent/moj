@@ -1,4 +1,6 @@
 service postgresql start
+bash /opt/server/data/moj-problem-set/scripts/update_problem_data.sh
+
 python3 /opt/uoj/judger/judge_client start
 cd /opt/server && forever /opt/server/bin/www start &
 
