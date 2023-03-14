@@ -43,7 +43,6 @@ exports.submit_answer = async function(req, res)
     else if(langId == 12) langId = "Lua";
     else 
     {
-		console.log('invalid languge ID');
         res.end("invalid languge ID");
         return;
     }

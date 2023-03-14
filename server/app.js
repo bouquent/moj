@@ -16,7 +16,7 @@ app.all('*', function(req, res, next){
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
   if (req.method === 'OPTIONS'){
     res.sendStatus(200);
-  }else{
+  } else{
     next();
   }
 });
@@ -36,6 +36,7 @@ app.use('/cgi', cgiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res) {
+  res.status(404);
   res.end('bad request');
 });
 

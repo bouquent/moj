@@ -24,7 +24,7 @@ router.get("/update-problemset", (req, res)=>
 
 router.get("/health_check", (req, res)=>
 {
-	res.end('');
+	res.end('health');
 });
 
 module.exports = router;
