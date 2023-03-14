@@ -8,8 +8,7 @@ var path = require('path');
 
 // router.post("/submit", judge_controller.submit_answer);
 
-router.get("/update-problemset", (req, res)=>
-{
+router.get("/update-problemset", (req, res) => {
     let script = `${path.join(__dirname, "..", "/scripts")}/update.cgi`;
 
     if (!fs.existsSync(script)) {
@@ -22,9 +21,8 @@ router.get("/update-problemset", (req, res)=>
     res.status(200).end("OK\n");
 });
 
-router.get("/health_check", (req, res)=>
-{
-	res.end('health');
+router.get("/health_check", (req, res) => {
+    res.end('health');
 });
 
 module.exports = router;

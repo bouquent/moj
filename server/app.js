@@ -10,13 +10,13 @@ var judgeRouter = require('./routes/judge');
 var cgiRouter = require('./routes/cgi');
 var app = express();
 
-app.all('*', function(req, res, next){
-  res.header('Access-Control-Allow-Origin',  '*');
+app.all('*', function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With, yourHeaderFeild, timestamp, encoded-str, rand-str');
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-  if (req.method === 'OPTIONS'){
+  if (req.method === 'OPTIONS') {
     res.sendStatus(200);
-  } else{
+  } else {
     next();
   }
 });
@@ -35,7 +35,7 @@ app.use('/judge', judgeRouter);
 app.use('/cgi', cgiRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res) {
+app.use(function (req, res) {
   res.status(404);
   res.end('bad request');
 });
